@@ -58,26 +58,18 @@ namespace Devoir1
             Console.Write("Please enter a integer square dimension value between 3 and " + pSquareDimensionMaximum + ": ");
         }
 
-        public static bool SquareDimensionValueVerification(int pSquareDimensionMaximum, string pUserValueSquareDimensionString)
+        public static bool ValueVerification(int pSquareDimensionMinimum, int pSquareDimensionMaximum, string pUserValueSquareDimensionString, string pWarningMessage)
         {
             int number;
 
             bool success = Int32.TryParse(pUserValueSquareDimensionString, out number);
-            if (success)
+            if (success && number >= pSquareDimensionMinimum && number <= pSquareDimensionMaximum)
             {
-                if (number >= 3 && number <= pSquareDimensionMaximum)
-                {
-                    return true;
-                }
-                else
-                {
-                    WarningDimension(pSquareDimensionMaximum);
-                    return false;
-                }
+                return true;
             }
             else
             {
-                WarningDimension(pSquareDimensionMaximum);
+                DisplayWarning(pWarningMessage);
                 return false;
             }
         }
@@ -93,42 +85,6 @@ namespace Devoir1
             Console.Write("\nPlease enter a numeric value between 1 and 5: ");
         }
 
-        public static bool MenuValueVerification(string pUserValueSquareDimensionString)
-        {
-            int number;
-
-            bool success = Int32.TryParse(pUserValueSquareDimensionString, out number);
-            if (success)
-            {
-                if (number >= 1 && number <= 5)
-                {
-                    return true;
-                }
-                else
-                {
-                    WarningMenu();
-                    return false;
-                }
-            }
-            else
-            {
-                WarningMenu();
-                return false;
-            }
-        }
-
-        public static void WarningDimension(int pSquareDimensionMaximum)
-        {
-            var msg = $"Only integer value between 3 and {pSquareDimensionMaximum} are permetted ";
-            DisplayWarning(msg);
-        }
-
-        public static void WarningMenu()
-        {
-            var msg = $" Only integer value between 1 and 5 are permetted ";
-            DisplayWarning(msg);
-        }
-
         public static void DisplayWarning(string msg)
         {
             Console.WriteLine("----------------------------------------------------------");
@@ -142,16 +98,23 @@ namespace Devoir1
 
         static void Main(string[] args)
         {
+            int squareDimensionMinimum = 3;
             int squareDimensionMaximum = 95;
-            string userValueSquareShape;
-            string userValueSquareDimension;
+            string squareWarningDimensionMessage = $"Only integer value between 3 and {squareDimensionMaximum} are permetted ";
+            
+            int menuNumberMinimum = 1;
+            int menuNumberMaximum = 5;
+            string menuWarningMessage = $" Only integer value between {menuNumberMinimum} and {menuNumberMaximum} are permetted ";
+
+            string userValueSquareShapeString;
+            string userValueSquareDimensionString;
 
             SquareDimensionMenu(squareDimensionMaximum);
-            userValueSquareDimension = Console.ReadLine();
-            while (!SquareDimensionValueVerification(squareDimensionMaximum, userValueSquareDimension))
+            userValueSquareDimensionString = Console.ReadLine();
+            while (!ValueVerification(squareDimensionMinimum, squareDimensionMaximum, userValueSquareDimensionString, squareWarningDimensionMessage))
             {
                 SquareDimensionMenu(squareDimensionMaximum);
-                userValueSquareDimension = Console.ReadLine();
+                userValueSquareDimensionString = Console.ReadLine();
             }
 
             Console.WriteLine();
@@ -159,23 +122,23 @@ namespace Devoir1
             while (true)
             {
                 Menu();
-                userValueSquareShape = Console.ReadLine();
+                userValueSquareShapeString = Console.ReadLine();
                 Console.WriteLine();
 
-                if (MenuValueVerification(userValueSquareShape))
+                if (ValueVerification(menuNumberMinimum, menuNumberMaximum, userValueSquareShapeString, menuWarningMessage))
                 {
-                    if (userValueSquareShape == "1" || userValueSquareShape == "2" || userValueSquareShape == "3")
+                    if (userValueSquareShapeString == "1" || userValueSquareShapeString == "2" || userValueSquareShapeString == "3")
                     {
-                        SquareMethod(userValueSquareShape, userValueSquareDimension);
+                        SquareMethod(userValueSquareShapeString, userValueSquareDimensionString);
                     }
-                    else if (userValueSquareShape == "4")
+                    else if (userValueSquareShapeString == "4")
                     {
                         SquareDimensionMenu(squareDimensionMaximum);
-                        userValueSquareDimension = Console.ReadLine();
-                        while (!SquareDimensionValueVerification(squareDimensionMaximum, userValueSquareDimension))
+                        userValueSquareDimensionString = Console.ReadLine();
+                        while (!ValueVerification(squareDimensionMinimum, squareDimensionMaximum, userValueSquareDimensionString, squareWarningDimensionMessage))
                         {
                             SquareDimensionMenu(squareDimensionMaximum);
-                            userValueSquareDimension = Console.ReadLine();
+                            userValueSquareDimensionString = Console.ReadLine();
                         }
                     }
                     else
